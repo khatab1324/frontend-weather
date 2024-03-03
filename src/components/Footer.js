@@ -1,68 +1,80 @@
 import React from 'react';
+import { FaGithub } from 'react-icons/fa';
 import logo from './images/v2_69.png';
-import Github from './images/github.png'
 
-const Footer = () => {
-  return (
-    <footer id="footer"style={styles.footer}>
-      <div style={styles.footerContent}>
-        <p>&copy; 2024 WeatherWise Inc. All rights reserved.</p>
-        <div style={styles.socialIcons}>
-        <div style={styles.logoContainer}>
-            <a href="/" style={styles.iconLink}>
-              <img src={Github} alt="Github" style={styles.Github} />
-            </a>
-          </div>
-          <a href="https://github.com/Osamasubani2003" style={styles.iconLink}><i className="fab fa-facebook-f"></i>Osama Subani</a>
-          <a href="https://github.com/omarSarawi" style={styles.iconLink}><i className="fab fa-instagram"></i>Omar srawi</a>
-        </div>
-        <p>
-          <div style={styles.logoContainer}>
-            <a href="/" style={styles.iconLink}>
-              <img src={logo} alt="Logo" style={styles.logo} />
-            </a>
-          </div>
-        </p>
+const Footer = () => (
+  <footer id="footer" style={styles.footer}>
+    <div style={styles.logoContainer}>
+      <a href="/" style={styles.iconLink}>
+        <img src={logo} alt="Logo" style={styles.logo} />
+      </a>
+    </div>
+    <div style={styles.footerContent}>
+      <p style={styles.text}>&copy; 2024 WeatherWise Inc. All rights reserved.</p>
+      <div style={styles.socialIcons}>
+        <IconLink href="https://github.com/omarSarawi" icon={<FaGithub />} text="Omar Sarawi" />
+        <IconLink href="https://github.com/Osamasubani2003" icon={<FaGithub />} text="Osama Subani" />
       </div>
-    </footer>
-  );
-}
+    </div>
+  </footer>
+);
+
+const IconLink = ({ href, icon, text }) => (
+  <div style={styles.iconContainer}>
+    <a href={href} style={styles.iconLink}>
+      {icon}
+      {text && <span style={styles.iconText}>{text}</span>}
+    </a>
+  </div>
+);
 
 const styles = {
   footer: {
     backgroundColor: '#3b494d',
     color: '#bebebe',
-    padding: '40px 0',
     textAlign: 'center',
+    fontFamily: 'Arial, sans-serif',
+    padding: '20px 0',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   footerContent: {
-    maxWidth: '800px',
-    margin: '0 auto',
+    flex: '1',
+    textAlign: 'center',
   },
-  link: {
-    color: '#bebebe',
-    textDecoration: 'none',
-  }, 
   logoContainer: {
-  marginRight: '20px',
+    marginLeft: '10px', // Adjust the margin here to move the logo to the right
+    textAlign: 'left',
   },
   logo: {
-    width: '300px', 
-    height: 'auto', 
+    width: '100px',
+    height: 'auto',
   },
-  Github:{
-    
-    width: '50px', 
-    height: 'auto', 
+  text: {
+    fontSize: '14px',
+    marginBottom: '10px',
+  },
+  iconContainer: {
+    marginRight: '20px',
+  },
+  icon: {
+    width: '30px',
+    height: 'auto',
+  },
+  iconText: {
+    marginLeft: '5px',
   },
   socialIcons: {
-    marginTop: '20px',
+    display: 'flex',
+    justifyContent: 'center',
   },
   iconLink: {
     color: '#bebebe',
-    fontSize: '24px',
-    margin: '0 10px',
+    fontSize: '18px',
     textDecoration: 'none',
+    display: 'flex',
+    alignItems: 'center',
   },
 };
 

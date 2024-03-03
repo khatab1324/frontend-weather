@@ -9,7 +9,7 @@ const cors = require("cors");
 const bcrypt = require("bcrypt");
 const app = express();
 //connection mongoose
-mongoose.set("strictQuery", false); 
+mongoose.set("strictQuery", false);
 mongoose
   .connect("mongodb://127.0.0.1:27017/weather-users", {
     useNewUrlParser: true,
@@ -34,22 +34,27 @@ const HttpStatus = {
 
 app.use(
   cors({
-    origin: "http://localhost:4200",
+    origin: "http://localhost:3000",
     credentials: true,
   })
 );
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.post("/adduser", async (req, res) => {
-  const { username, password } = req.body;
+  let { username, password, email, country, city } = req.body;
+  console.log(req.body);
+
+  country = country.value;
+  city = city.value;
   try {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const user = new User({
       username,
+      email,
+      country,
+      city,
       password: hashedPassword,
-      email: "tester@gmail.com",
-      address: { city: "amman", country: "jordan" },
     });
     console.log("users", user);
     await user.save();
@@ -78,27 +83,35 @@ app.post("/adduser", async (req, res) => {
       );
   }
 });
-app.get("/getuser", async (req, res) => {
-  const { username } = req.body;
-  try {
-    const user = await User.findOne({ username });
-    res.status(HttpStatus.OK.code).send(
-      new Response(HttpStatus.OK.code, HttpStatus.OK.status, "send users", {
-        user,
-      })
+app.post("/getuser", async (req, res) => {
+  const { username, password } = req.body;
+  const user = await User.findOne({ username });
+  console.log(user);
+  if (!user) {
+    res.status(HttpStatus.NOT_FOUND.code).send(
+      JSON.stringify(
+        new Response(HttpStatus.NOT_FOUND.code, HttpStatus.NOT_FOUND.status, {
+          passwordError: "user not Found",
+        })
+      )
     );
-  } catch (err) {
-    res
-      .status(HttpStatus.INTERNAL_SERVER_ERROR.code)
-      .send(
-        new Response(
-          HttpStatus.INTERNAL_SERVER_ERROR.code,
-          HttpStatus.INTERNAL_SERVER_ERROR.status,
-          "Failed to get user",
-          err.message
-        )
-      );
   }
+  if (!(await bcrypt.compare(password, user.password))) {
+    res.status(HttpStatus.NOT_FOUND.code).send(
+      JSON.stringify(
+        new Response(HttpStatus.NOT_FOUND.code, HttpStatus.NOT_FOUND.status, {
+          passwordError: "password wrong",
+        })
+      )
+    );
+  }
+  res.status(HttpStatus.OK.code).send(
+    JSON.stringify(
+      new Response(HttpStatus.OK.code, HttpStatus.OK.status, "send users", {
+        username: user.username,
+      })
+    )
+  );
 });
 app.post("/update-info", async (req, res) => {
   try {

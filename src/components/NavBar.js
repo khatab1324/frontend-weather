@@ -1,59 +1,75 @@
-import React from 'react';
-import logo from './images/v2_69.png';
+import React from "react";
+import { FaUser } from "react-icons/fa"; // Import the React icon for the profile
+import logo from "./images/v2_69.png";
+const username = sessionStorage.getItem("username");
+const Navbar = () => (
+  <nav style={styles.navbar}>
+    <ul style={styles.navbarNav}>
+      <NavItem link="/">{username ? `${username}` : <Logo />}</NavItem>
+      <NavItem link="/">Home</NavItem>
+      <NavItem link="/components/Jordan">Landmarks</NavItem>
+    </ul>
+    <div style={styles.profileContainer}>
+      <NavItem link="/components/forms/ProfilePage">
+        <FaUser /> {/* Replace "Profile" with the React icon */}
+      </NavItem>
+    </div>
+  </nav>
+);
 
-const Navbar = () => {
-  return (
-    <nav style={styles.navbar}>
-      <ul style={styles.navbarNav}>
-      <li style={styles.navItem}>
-          <a href="/" style={styles.navLink}>
-            <div style={styles.logoContainer}>
-              <img src={logo} alt="Logo" style={styles.logo} />
-            </div>
-          </a>
-        </li>
-        <li style={styles.navItem}>
-          <a href="/" style={styles.navLink}>Home</a>
-        </li>
-        <li style={styles.navItem}>
-          <a href="/components/Jordan" style={styles.navLink}>Landmarks</a>
-        </li>
-        <li style={styles.navItem}>
-          <a href="/components/forms/ProfilePage" style={styles.navLink}>Profile</a>
-        </li>
-      </ul>
-    </nav>
-  );
-}
+const NavItem = ({ link, children }) => (
+  <li style={styles.navItem}>
+    <NavLink href={link}>{children}</NavLink>
+  </li>
+);
+
+const NavLink = ({ href, children }) => (
+  <a href={href} style={styles.navLink}>
+    {children}
+  </a>
+);
+
+const Logo = () => (
+  <div style={styles.logoContainer}>
+    <img src={logo} alt="Logo" style={styles.logo} />
+  </div>
+);
 
 const styles = {
   navbar: {
-    backgroundColor: '#3b494d', 
-    padding: '10px', 
-    display: 'flex',
-    alignItems: 'center', 
-  },
-  logoContainer: {
-    marginRight: '20px',
-  },
-  logo: {
-    width: '150px', 
-    height: 'auto', 
+    backgroundColor: "#3b494d",
+    padding: "10px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   navbarNav: {
-    listStyleType: 'none', 
+    listStyleType: "none",
     padding: 0,
     margin: 0,
+    display: "flex",
+    alignItems: "center",
   },
   navItem: {
-    display: 'inline-block',
-    marginRight: '20px',
+    marginRight: "20px",
   },
   navLink: {
-    color: '#bebebe',
-    textDecoration: 'none', 
-    fontSize: '40px', 
-  }
+    color: "#bebebe",
+    textDecoration: "none",
+    fontSize: "18px",
+    transition: "color 0.3s ease",
+  },
+  logoContainer: {
+    marginRight: "20px",
+  },
+  logo: {
+    width: "150px",
+    height: "auto",
+  },
+  profileContainer: {
+    display: "flex",
+    alignItems: "center",
+  },
 };
 
 export default Navbar;
